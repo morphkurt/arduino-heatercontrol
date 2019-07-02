@@ -5,21 +5,20 @@ IRsend irsend;
 double maxTemp = 24.0;
 double minTemp = 18.0;
 bool heaterOn = false;
+int thermoPin = 0;
 
 double temperature() {
   double Temp;
-  int RawADC = analogRead(0);
+  int RawADC = analogRead(thermoPin);
   Temp = log(((10240000/RawADC) - 10000));
   Temp = 1 / (0.001129148 + (0.000234125 + (0.0000000876741 * Temp * Temp ))* Temp );
   Temp = Temp - 273.15; // Convert Kelvin to Celcius
-  Serial.println(Temp);
   return Temp;
 }
 
 void turnOn() {
    irsend.sendNEC(0x00ff807f, 32);
    delay(2000);
-   //FF906F
    irsend.sendNEC(0x00ff906f, 32);
 }
 
